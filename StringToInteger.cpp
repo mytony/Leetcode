@@ -8,15 +8,17 @@ public:
         while(i < str.length() && str[i] == ' '){
             i++;
         }
-        if(i == str.length())
+        if(i == str.length()){
             return 0;
-        else if(str[i] != '+' && str[i] != '-' && !isdigit(str[i]))
+        } else if (str[i] != '+' && str[i] != '-' && !isdigit(str[i])){
             return 0;
-        else if(!isdigit(str[i]))
-            if(str[i] == '-')
+        } else if (!isdigit(str[i])){
+            if(str[i] == '-'){
                 isPos = false;
-        else
+            }
+        } else {
             num = num * 10 + (str[i] - '0');
+        }
         i++;
         while(i < str.length() && isdigit(str[i])){
             num = num * 10 + (str[i] - '0');
