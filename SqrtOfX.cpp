@@ -10,7 +10,7 @@ public:
             mid = low + (high - low) / 2; // a clever way to prevent overflow
             sq = mid * mid;
             if(sq > x){
-                if(pow(mid - 1, 2) <= x)
+                if(pow(mid - 1, 2) <= x)  // why there's no overflow here, we can turn to write mid <= x/mid to avoid overflow
                     return mid - 1;
                 high = mid;
             } else if(sq < x){
