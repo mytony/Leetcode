@@ -1,32 +1,19 @@
 class Solution {
 public:
-    // this code is not concise as the code on forum
     vector<string> summaryRanges(vector<int>& nums) {
-        int head, tail;
+        int head = 0;
         vector<string> res;
-        if (nums.empty()) {
-            return res;
-        }
-        head = tail = nums[0];
-        for (int i = 1; i < nums.size(); i++) {
-            if (nums[i] == tail + 1) {
-                tail = nums[i];
-            } else {
-                // chain breaks and print it
-                if (head == tail) {
-                    res.push_back(to_string(head));
+        
+        for (int i = 0; i < nums.size(); i++) {
+            // foresee the next element
+            if (i + 1 == nums.size() || nums[i] + 1 != nums[i+1]) {
+                if (head == i) {
+                    res.push_back(to_string(nums[i]));
                 } else {
-                    res.push_back(to_string(head) + "->" + to_string(tail));
+                    res.push_back(to_string(nums[head]) + "->" + to_string(nums[i]));
                 }
-                // assign new head
-                head = tail = nums[i];
+                head = i + 1;
             }
-        }
-        // print last range skipped by for loop
-        if (head == tail) {
-            res.push_back(to_string(head));
-        } else {
-            res.push_back(to_string(head) + "->" + to_string(tail));
         }
         
         return res;
