@@ -8,27 +8,27 @@ class Solution {
 public:
     int ladderLength(string beginWord, string endWord, unordered_set<string>& wordList) {
         unordered_set<string> visited;
-        pair<string, int> next;
-        queue< pair<string, int> > q;
+        queue<string> q;
+        q.push(beginWord);
+        int level = 0;
         
-        q.push(make_pair(beginWord, 1));
         while (!q.empty()) {
-            string newWord, curWord;
-            next = q.front();
-            q.pop();
-            curWord = next.first;
-            visited.insert(curWord);
-            // if this word differs 1 character with endWord, then return
-            // if (differOneChar(curWord, endWord)) return next.second + 1;
-            // for each position of string, replace with a-z
-            for (int i = 0; i < curWord.size(); i++) {
-                for (int j = 0; j < 26; j++) {
-                    newWord = curWord;
-                    newWord[i] = 'a' + j;
-                    if (wordList.find(newWord) != wordList.end() 
-                        && visited.find(newWord) == visited.end()) {
-                        q.push(make_pair(newWord, next.second + 1));
-                        if (differOneChar(newWord, endWord)) return next.second + 2;
+            level++;
+            for (int k = 0; k < q.size(); k++) {
+                string newWord, curWord;
+                curWord = q.front();
+                q.pop();
+                visited.insert(curWord);
+                // for each position of string, replace with a-z
+                for (int i = 0; i < curWord.size(); i++) {
+                    for (int j = 0; j < 26; j++) {
+                        newWord = curWord;
+                        newWord[i] = 'a' + j;
+                        if (wordList.find(newWord) != wordList.end() 
+                            && visited.find(newWord) == visited.end()) {
+                            q.push(newWord);
+                            if (differOneChar(newWord, endWord)) return level + 2;
+                        }
                     }
                 }
             }
