@@ -16,11 +16,14 @@ public:
         while (!q.empty()) {
             level++;
             int num = q.size();
+            
+            // This for loop tracks the level
             for (int k = 0; k < num; k++) {
                 string newWord, curWord;
                 curWord = q.front();
                 q.pop();
                 if (curWord == endWord) return level;
+
                 // for each position of string, replace with a-z
                 for (int i = 0; i < curWord.size(); i++) {
                     for (int j = 0; j < 26; j++) {
