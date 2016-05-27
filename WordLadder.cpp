@@ -7,42 +7,34 @@ using namespace std;
 class Solution {
 public:
     int ladderLength(string beginWord, string endWord, unordered_set<string>& wordList) {
-        unordered_set<string> visited;
         queue<string> q;
         q.push(beginWord);
+        wordList.insert(endWord);
+        wordList.erase(beginWord);
         int level = 0;
         
         while (!q.empty()) {
             level++;
-            for (int k = 0; k < q.size(); k++) {
+            int num = q.size();
+            for (int k = 0; k < num; k++) {
                 string newWord, curWord;
                 curWord = q.front();
                 q.pop();
-                visited.insert(curWord);
+                if (curWord == endWord) return level;
                 // for each position of string, replace with a-z
                 for (int i = 0; i < curWord.size(); i++) {
                     for (int j = 0; j < 26; j++) {
                         newWord = curWord;
                         newWord[i] = 'a' + j;
-                        if (wordList.find(newWord) != wordList.end() 
-                            && visited.find(newWord) == visited.end()) {
+                        if (wordList.find(newWord) != wordList.end()) {
                             q.push(newWord);
-                            if (differOneChar(newWord, endWord)) return level + 2;
+                            wordList.erase(newWord);
                         }
                     }
                 }
             }
         }
         return 0;
-    }
-private:
-    bool differOneChar(string a, string b) {
-        int count = 0;
-        for (int i = 0; i < a.size(); i++) {
-            if (a[i] != b[i]) count++;
-            if (count > 1) return false;
-        }
-        return true;
     }
 };
 
