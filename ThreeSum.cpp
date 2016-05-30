@@ -26,14 +26,17 @@ public:
                     res.push_back({nums[a], nums[b], nums[c]});
                     b++;
                     c--;
+                    // avoid duplicate
                     while (nums[b-1] == nums[b] && b < c) b++;
                     while (nums[c] == nums[c+1] && b < c) c--;
                 } else if (sum > 0) {
                     c--;
-                    while (nums[c] == nums[c+1] && b < c) c--;
+                    // not necessary, the while loop would handle
+                    // while (nums[c] == nums[c+1] && b < c) c--;
                 } else {
                     b++;
-                    while (nums[b-1] == nums[b] && b < c) b++;
+                    // not necessary, the while loop would handle
+                    // while (nums[b-1] == nums[b] && b < c) b++;
                 }
             }
         }
