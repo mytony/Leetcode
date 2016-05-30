@@ -12,7 +12,12 @@ public:
         // b initialized to a+1 and c initialized to n-1 element
         sort(nums.begin(), nums.end());
         for (a = 0; a < size - 2; a++) {
+            // special pruning condition
+            if (nums[a] > 0) break;
+            
+            // duplicate searching
             if (a > 0 && nums[a] == nums[a-1]) continue;
+            
             b = a + 1;
             c = size - 1;
             while (b < c) {
