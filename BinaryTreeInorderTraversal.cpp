@@ -9,6 +9,8 @@
  */
  // looked forum for iteration method
  // https://leetcode.com/discuss/10927/three-methods-to-solve-c
+ // Below article mentions recursion is not ideal when tree is not balanced
+ // http://articles.leetcode.com/binary-search-tree-in-order-traversal
 class Solution {
 public:
     // Recursion -> trivial
