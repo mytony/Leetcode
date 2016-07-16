@@ -10,17 +10,8 @@
 class Solution {
 public:
     int maxDepth(TreeNode* root) {
-        return visit(root, 1);
-    }
-    
-    int visit(TreeNode* node, int depth) {
-        if (!node) {
+        if (!root)
             return 0;
-        }
-        // leaf
-        if (!(node->left || node->right)) {
-            return depth;
-        }
-        return max(visit(node->left, depth+1), visit(node->right, depth+1));
+        return 1 + max(maxDepth(root->left), maxDepth(root->right));
     }
 };
