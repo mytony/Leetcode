@@ -14,6 +14,7 @@
 class Solution {
 public:
     // Recursion -> trivial
+    // Stack space could be O(lgn) or O(n) which is bad
     // vector<int> res;
     // vector<int> inorderTraversal(TreeNode* root) {
     //     if (root) {
@@ -28,13 +29,14 @@ public:
     vector<int> inorderTraversal(TreeNode* root) {
         vector<int> res;
         stack<TreeNode*> stk;
-        unordered_set<TreeNode*> set;
+        unordered_set<TreeNode*> set; // record if the node is visited 
         
         if (!root) return res;
         stk.push(root);
         
         while (!stk.empty()) {
             TreeNode *node = stk.top();
+
             if (node->left && set.find(node) == set.end()) {
                 stk.push(node->left);
                 set.insert(node);
