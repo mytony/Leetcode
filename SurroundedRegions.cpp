@@ -1,74 +1,93 @@
 class Solution {
 public:
-    // Result: TLE
-    // Search 'O' from top-left to bottom-right
-    // For each 'O', do BFS. Set a flag if there is a 'O' on the boarder
-    // For each BFS, flip all elements on the path if the flag is not set
+    // Forum solution
+    // But still not good, see below comment
     void solve(vector<vector<char>>& board) {
         int m = board.size();
         if (m == 0) return;
         int n = board[0].size();
-        vector<vector<int>> visited(m, vector<int>(n));
         
-        // initialize the visited board with X and O on the board
+        // change all 'O' to '1' if they are on the boarder or connected to
         for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                visited[i][j] = board[i][j] == 'X' ? 1 : 0;
+            alter(board, i, 0); // left boarder
+            if (n > 1) {
+                alter(board, i, n-1); // right boarder
+            }
+        }
+        for (int i = 1; i+1 < n; i++) {
+            alter(board, 0, i); // top boarder
+            if (m > 1) {
+                alter(board, m-1, i); // bottom boarder
             }
         }
         
-        bool onEdge = false;
-        queue<int> bfs_q; // store 1-D coordinate of (i,j)
-        
-        // for every unvisited O, run BFS
+        // change all 'O' to 'X'
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (visited[i][j] == 1) {
-                    continue;
-                }
-                
-                onEdge = false; // reset for each region
-                vector<int> path; // record the path if we want to flip captured Os
-                bfs_q.push(i * n + j);
-                
-                while( !bfs_q.empty() ) {
-                    int k = bfs_q.front();
-                    int x = k / n;
-                    int y = k % n;
-                    bfs_q.pop();
-                    visited[x][y] = 1;
-                    path.push_back(k);
-                    
-                    // The region will not be captured in the end
-                    if (x == 0 || x == m - 1 || y == 0 || y == n - 1) {
-                        onEdge = true;
-                    }
-                    
-                    // visit four possible O neighbors
-                    for (int a = -1; a < 2; a += 2) {
-                        // x is changed
-                        if (x+a >= 0 && x+a < m) {
-                            if (visited[x+a][y] == 0) {
-                                bfs_q.push((x + a) * n + y);
-                            }
-                        }
-                        // y is changed
-                        if (y+a >= 0 && y+a < n) {
-                            if (visited[x][y+a] == 0) {
-                                bfs_q.push(x * n + y + a);
-                            }
-                        }
-                    }
-                }
-                // flip the region if it is captured
-                if (!onEdge) {
-                    for (int k : path) {
-                        int x = k / n;
-                        int y = k % n;
-                        board[x][y] = 'X';
-                    }
+                if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
                 }
             }
+        }
+        // change all '1' to 'O'
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == '1') {
+                    board[i][j] = 'O';
+                }
+            }
+        }
+    }
+    
+    void alter(vector<vector<char>>& board, int x, int y) {
+        int m = board.size();
+        int n = board[0].size();
+        
+        if (board[x][y] != 'O') {
+            return;
+        }
+        board[x][y] = '1';
+        // check neighbors
+        ///////////////////////////////////////
+        // In this thread: https://discuss.leetcode.com/topic/17224/a-really-simple-and-readable-c-solution-only-cost-12ms/14
+        // They discussed that actually this DFS solution is problematic, should use BFS instead
+        // It passes if you write x > 1 to break the chain in below case, but x >= 1 will stack overflow
+        
+        // OOOOOOOOOO
+        // XXXXXXXXXO
+        // OOOOOOOOOO
+        // OXXXXXXXXX
+        // OOOOOOOOOO
+        // XXXXXXXXXO
+        // OOOOOOOOOO
+        // OXXXXXXXXX
+        // OOOOOOOOOO
+        // XXXXXXXXXO
+        
+        // but x > 1 will fail too if leetcode have a case like below:
+        
+        // OOOOOOOOOOOX
+        // XXXXXXXXXXOX
+        // XOOOOOOOOOOX
+        // XOXXXXXXXXXX
+        // XOOOOOOOOOOX
+        // XXXXXXXXXXOX
+        // XOOOOOOOOOOX
+        // XOXXXXXXXXXX
+        // XOOOOOOOOOOX
+        // XXXXXXXXXXOX
+        ///////////////////////////////////////
+        if (x > 1) {
+            alter(board, x-1, y);
+        }
+        if (y > 1) {
+            alter(board, x, y-1);
+        }
+        if (x + 1 < m) {
+            alter(board, x+1, y);
+        }
+        if (y + 1 < n) {
+            alter(board, x, y+1);
         }
     }
 };
