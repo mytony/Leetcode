@@ -1,8 +1,13 @@
 // looked forum
 // https://leetcode.com/discuss/48488/c-4ms-recursive-%26-dp-solution-with-brief-explanation
 class Solution {
+private:
+    // use memoization to avoid duplicate calculation
+    unordered_map<string, vector<int>> memo;
 public:
     vector<int> diffWaysToCompute(string input) {
+        if (memo.find(input) != memo.end()) { return memo[input]; }
+        
         vector<int> res;
         for (int i = 0; i < input.size(); i++) {
             char c = input[i];
@@ -28,6 +33,7 @@ public:
             res.push_back(stoi(input));
         }
         
+        memo[input] = res;
         return res;
     }
     
